@@ -1,5 +1,9 @@
 let wizardArray = [];
-const container = document.querySelector(".container");
+
+const container = document.querySelector(".sections");
+const saveBtn = document.querySelector("#save-btn");
+const loadBtn = document.querySelector("#load-btn");
+const addBtn = document.querySelector("#add-btn");
 
 const testData = [
     {
@@ -49,7 +53,7 @@ const testData = [
     }
 ]
 
-wizardArray = testData;
+// wizardArray = testData;
 
 function getSections(array) {
     for (let x = 0; x < array.length; x++) {
@@ -91,6 +95,8 @@ function addSectionsToPage() {
         sectionName.textContent = `${section.name} (ID: ${section.id})`
         sectionBody.textContent = section.content;
 
+        sectionName.setAttribute("section-value", section.id);
+
         if (section.buttons) {
             for (let y = 0; y < section.buttons.length; y++) {
                 const sectionButton = document.createElement("li");
@@ -104,14 +110,18 @@ function addSectionsToPage() {
         sectionContainer.appendChild(sectionButtons);
         container.appendChild(sectionContainer);
     }
-
+    addClickEventListener();
 }
 
 function getLargestID() {
-    return Math.max(...wizardArray.map(section => section.id));
+    if (wizardArray.length > 0) {
+        return Math.max(...wizardArray.map(section => section.id));
+    } else {
+        return 0;
+    }
 }
 
-function changeSectionContent(id) {
+function amendSectionContent(id, property) {
     const foundIndex = wizardArray.findIndex(section => section.id == id);
 
     if (!wizardArray[foundIndex]) {
@@ -119,10 +129,42 @@ function changeSectionContent(id) {
         return;
     }
 
-    const name = prompt("Change name to?");
-    wizardArray[foundIndex].name = name;
+    if (!wizardArray[foundIndex][property]) {
+        alert("No property found");
+        return;
+    }
+    
+    const newContent = prompt(`New ${property}`);
+    wizardArray[foundIndex][property] = newContent;
 
     addSectionsToPage();
 }
 
-addSectionsToPage();
+function addClickEventListener() {
+    const headings = document.querySelectorAll("h1");
+
+    headings.forEach((heading) => {
+
+        // and for each one we add a 'click' listener
+        heading.addEventListener("click", () => {
+          const sectionID = heading.getAttribute("section-value");
+          amendSectionContent(sectionID, "name");
+        });
+      });
+}
+
+function saveToLocalStorage() {
+    localStorage.setItem("wizardData", JSON.stringify(wizardArray) );
+    alert("Saved to local storage");
+}
+
+function loadFromLocalStorage() {
+    const dataFromLocalStorage = localStorage.getItem("wizardData");
+    wizardArray = JSON.parse(dataFromLocalStorage);
+    alert("Data loaded from local storage");
+    addSectionsToPage();
+}
+
+saveBtn.addEventListener("click", saveToLocalStorage);
+loadBtn.addEventListener("click", loadFromLocalStorage);
+addBtn.addEventListener("click", addNewSectionToArray);
