@@ -73,9 +73,9 @@ function addNewSectionToArray() {
 }
 
 function getNewSectionData() {
-    const name = prompt("Name?");
-    const content = prompt("Content?");
     const id = getLargestID() + 1;
+    const name = prompt("Name?", `Section ${id}`);
+    const content = prompt("Content?", "Content here...");
 
     const newItem = {
         id: id,
