@@ -1,9 +1,14 @@
 let wizardArray = [];
+let selectedIndex;
 
-const container = document.querySelector(".sections");
+const container = document.querySelector("#sections");
 const saveBtn = document.querySelector("#save-btn");
 const loadBtn = document.querySelector("#load-btn");
 const addBtn = document.querySelector("#add-btn");
+const saveSectionBtn = document.querySelector("#save-section");
+const nameInput = document.querySelector("input[name='name']");
+const contentInput = document.querySelector("textarea[name='content']");
+const cancelBtn = document.querySelector("#cancel-btn");
 
 const testData = [
     {
@@ -91,9 +96,10 @@ function addSectionsToPage() {
         const sectionName = document.createElement("h1");
         const sectionBody = document.createElement("p");
         const sectionButtons = document.createElement("ul");
+        const sectionEditBtn = document.createElement("button");
 
         sectionName.textContent = `${section.name} (ID: ${section.id})`
-        sectionBody.textContent = section.content;
+        sectionBody.innerHTML = section.content;
 
         sectionName.setAttribute("section-value", section.id);
 
@@ -105,12 +111,19 @@ function addSectionsToPage() {
             }
         }
 
+        sectionEditBtn.textContent = "Edit";
+        sectionEditBtn.classList.add("section-edit");
+        sectionEditBtn.setAttribute("value", section.id);
+
+        sectionContainer.appendChild(sectionEditBtn);
         sectionContainer.appendChild(sectionName);
         sectionContainer.appendChild(sectionBody);
         sectionContainer.appendChild(sectionButtons);
+
+        sectionContainer.classList.add("section");
         container.appendChild(sectionContainer);
     }
-    addClickEventListener();
+    addEditButtonEventListener();
 }
 
 function getLargestID() {
@@ -121,40 +134,53 @@ function getLargestID() {
     }
 }
 
-function amendSectionContent(id, property) {
-    const foundIndex = wizardArray.findIndex(section => section.id == id);
+function amendSectionContent(newContent, property) {
 
-    if (!wizardArray[foundIndex]) {
+    if (!wizardArray[selectedIndex]) {
         alert("No ID found");
         return;
     }
 
-    if (!wizardArray[foundIndex][property]) {
+    if (!wizardArray[selectedIndex][property]) {
         alert("No property found");
         return;
     }
-    
-    const newContent = prompt(`New ${property}`);
-    wizardArray[foundIndex][property] = newContent;
+
+    wizardArray[selectedIndex][property] = newContent;
 
     addSectionsToPage();
 }
 
-function addClickEventListener() {
-    const headings = document.querySelectorAll("h1");
+function getIndexOfSection(id) {
+    return wizardArray.findIndex(section => section.id == id);
+}
 
-    headings.forEach((heading) => {
+function addEditButtonEventListener() {
+    const buttons = document.querySelectorAll(".section-edit");
+
+    buttons.forEach((button) => {
 
         // and for each one we add a 'click' listener
-        heading.addEventListener("click", () => {
-          const sectionID = heading.getAttribute("section-value");
-          amendSectionContent(sectionID, "name");
+        button.addEventListener("click", () => {
+            const sectionID = button.getAttribute("value");
+            // amendSectionContent(sectionID, "name");
+            loadSectionContentIntoInputs(sectionID);
         });
-      });
+    });
+}
+
+function loadSectionContentIntoInputs(id) {
+    const index = getIndexOfSection(id);
+
+    nameInput.value = wizardArray[index].name;
+    contentInput.value = wizardArray[index].content.replace(/<br \/>/g, "\n");
+
+    selectedIndex = index;
+    console.log(nameInput);
 }
 
 function saveToLocalStorage() {
-    localStorage.setItem("wizardData", JSON.stringify(wizardArray) );
+    localStorage.setItem("wizardData", JSON.stringify(wizardArray));
     alert("Saved to local storage");
 }
 
@@ -165,6 +191,51 @@ function loadFromLocalStorage() {
     addSectionsToPage();
 }
 
+function saveSection(e) {
+    if (e) {
+        e.preventDefault();
+    }
+    if (!Number.isInteger(selectedIndex)) {
+        alert("No section selected...");
+        return;
+    }
+
+    const changes = checkIfContentChanged();
+
+    console.log(changes);
+
+    if (!changes) return;
+
+    amendSectionContent(nameInput.value, "name");
+    amendSectionContent(contentInput.value.replace(/\n/g, "<br />"), "content");
+    alert("Content saved!");
+    clearInputs();
+}
+
+function clearInputs(e) {
+    if (e) {
+        e.preventDefault();
+    }
+    nameInput.value = "";
+    contentInput.value = "";
+    selectedIndex = null;
+}
+
+function checkIfContentChanged() {
+    if (wizardArray[selectedIndex].name !== nameInput.value) {
+        return true;
+    }
+    else if (wizardArray[selectedIndex].content !== contentInput.value.replace(/\n/g, "<br />")) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
 saveBtn.addEventListener("click", saveToLocalStorage);
 loadBtn.addEventListener("click", loadFromLocalStorage);
 addBtn.addEventListener("click", addNewSectionToArray);
+saveSectionBtn.addEventListener("click", saveSection)
+cancelBtn.addEventListener("click", clearInputs);

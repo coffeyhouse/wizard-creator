@@ -1,0 +1,21 @@
+#sections, #edit-section {
+    width: calc(50% - 20px);
+    float: left;
+    min-height: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.section {
+    border: 1px solid black;
+    margin-bottom: 24px;
+    padding: 12px;
+}
+
+#content {
+    white-space: pre-wrap;
+}
+
+input, textarea {
+    width: 100%;
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,15 +8,30 @@
     <title>Wizard creator</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
+
 <body>
     <div class="container">
-        <div class="sections">
+        <div id="buttons">
+            <button id="load-btn">Load data</button>
+            <button id="save-btn">Save</button>
+            <button id="add-btn">Add new item</button>
+        </div>
+        <div id="sections">
 
         </div>
-        <button id="load-btn">Load data</button>
-        <button id="save-btn">Save</button>
-        <button id="add-btn">Add new item</button>
+        <div id="edit-section">
+            <h3>Edit section</h3>
+            <form>
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name"><br>
+                <label for="content">Content:</label><br>
+                <textarea rows="5" id="content" name="content"></textarea><br>
+                <button id="save-section">Save section</button>
+                <button id="cancel-btn">Cancel</button>
+              </form>
+        </div>
     </div>
     <script src="scripts/script.js"></script>
 </body>
+
 </html>
