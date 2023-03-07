@@ -9,6 +9,9 @@ const saveSectionBtn = document.querySelector("#save-section");
 const nameInput = document.querySelector("input[name='name']");
 const contentInput = document.querySelector("textarea[name='content']");
 const cancelBtn = document.querySelector("#cancel-btn");
+const buttonCheckbox = document.querySelector("#button-checkbox");
+const addButtonContainer = document.querySelector("#add-button-container");
+
 
 const testData = [
     {
@@ -233,9 +236,19 @@ function checkIfContentChanged() {
     }
 }
 
+function watchButtonCheckbox() {
+    if (this.checked) {
+        addButtonContainer.style.display = "block";
+    } else {
+        addButtonContainer.style.display = "none";
+    }
+}
+
+
 
 saveBtn.addEventListener("click", saveToLocalStorage);
 loadBtn.addEventListener("click", loadFromLocalStorage);
 addBtn.addEventListener("click", addNewSectionToArray);
 saveSectionBtn.addEventListener("click", saveSection)
 cancelBtn.addEventListener("click", clearInputs);
+buttonCheckbox.addEventListener("change", watchButtonCheckbox)

@@ -16,6 +16,10 @@
     white-space: pre-wrap;
 }
 
-input, textarea {
+/* input, textarea {
     width: 100%;
+} */
+
+#add-button-container {
+  display: none;
 }
