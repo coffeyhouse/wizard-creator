@@ -12,7 +12,6 @@ const cancelBtn = document.querySelector("#cancel-btn");
 const buttonCheckbox = document.querySelector("#button-checkbox");
 const addButtonContainer = document.querySelector("#add-button-container");
 
-
 const testData = [
     {
         id: 1,
@@ -61,7 +60,7 @@ const testData = [
     }
 ]
 
-// wizardArray = testData;
+wizardArray = testData;
 
 function getSections(array) {
     for (let x = 0; x < array.length; x++) {
@@ -136,6 +135,7 @@ function getLargestID() {
         return 0;
     }
 }
+
 
 function amendSectionContent(newContent, property) {
 
@@ -242,6 +242,33 @@ function watchButtonCheckbox() {
     } else {
         addButtonContainer.style.display = "none";
     }
+}
+
+function addButtonSection() {
+    const buttonAdd = document.querySelector(".button-add");
+    const selectList = createSectionDropdown();
+
+    buttonAdd.appendChild(selectList);
+}
+
+function createSectionDropdown() {
+    const select = document.createElement("select");
+    const initialOption = document.createElement("option");
+    initialOption.setAttribute("disabled","");
+    initialOption.setAttribute("selected","");
+    initialOption.textContent = "-- Select an option --";
+
+    select.appendChild(initialOption);
+
+    for (let x = 0; x < wizardArray.length; x++) {
+        const option = document.createElement("option");
+        option.setAttribute("value", wizardArray[x].id);
+        option.textContent = wizardArray[x].name;
+
+        select.appendChild(option);
+    }
+    
+    return select;
 }
 
 
