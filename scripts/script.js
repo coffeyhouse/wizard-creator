@@ -11,6 +11,7 @@ const contentInput = document.querySelector("textarea[name='content']");
 const cancelBtn = document.querySelector("#cancel-btn");
 const buttonCheckbox = document.querySelector("#button-checkbox");
 const addButtonContainer = document.querySelector("#add-button-container");
+const editSection = document.querySelector("#edit-section");
 
 const testData = [
     {
@@ -254,8 +255,8 @@ function addButtonSection() {
 function createSectionDropdown() {
     const select = document.createElement("select");
     const initialOption = document.createElement("option");
-    initialOption.setAttribute("disabled","");
-    initialOption.setAttribute("selected","");
+    initialOption.setAttribute("disabled", "");
+    initialOption.setAttribute("selected", "");
     initialOption.textContent = "-- Select an option --";
 
     select.appendChild(initialOption);
@@ -267,8 +268,48 @@ function createSectionDropdown() {
 
         select.appendChild(option);
     }
-    
+
     return select;
+}
+
+function createEditSection() {
+    const nameInput = createInput("Name", "text");
+    const contentInput = createInput("Content", "select");
+
+    editSection.appendChild(nameInput);
+    editSection.appendChild(contentInput);
+
+}
+
+function createInput(name, type) {
+    const itemName = name.toLowerCase() + "-input";
+
+    const item = document.createElement("div");
+    item.classList.add("edit-input");
+
+    const label = document.createElement("label");
+    label.setAttribute("for", itemName);
+    label.textContent = name + ":";
+
+    item.appendChild(label);
+
+    if (type === "text") {
+        const input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("id", name.toLowerCase() + "-input");
+        input.setAttribute("name", name.toLowerCase() + "-input");
+        item.appendChild(input);
+    }
+
+    if (type === "select") {
+        const input = document.createElement("textarea");
+        input.setAttribute("rows", "5");
+        input.setAttribute("id", name.toLowerCase() + "-input");
+        input.setAttribute("name", name.toLowerCase() + "-input");
+        item.appendChild(input);
+    }
+
+    return item;
 }
 
 
