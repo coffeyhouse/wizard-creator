@@ -1,0 +1,134 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background-color: #F9FBFC;
+    height: 100vh;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 14px 36px;
+    background-color: white;
+}
+
+.right-header,
+.left-header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+#header button {
+    display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 10px 14px;
+gap: 8px;
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 18px;
+letter-spacing: -0.32px;
+
+/* Base/White */
+background-color: #F1F1F1;
+color: #5F5F61;
+border-radius: 7px;
+border: 1px solid #E6E6E6;
+/* Shadow/xs */
+
+box-shadow: 0px 3px 4px -5px rgba(24, 24, 28, 0.03), 0px 1px 2px rgba(24, 24, 28, 0.04);
+}
+
+#header button.btn-primary {
+    background: #105DFB;
+    color: #FFFFFF;
+}
+
+#header p {
+    font-weight: 400;
+    font-size: 21px;
+    margin: 0;
+    padding: 0;
+    color: #343434;
+    letter-spacing: 0.5px;
+}
+
+.icon {
+    height: 24px;
+    width: 24px;
+    background-color: #115DFC;
+    border-radius: 8px;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: stretch;
+}
+
+#main .container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.05);
+    padding: 24px;
+    box-shadow: 0px 0px 2px rgba(24, 24, 28, 0.02), 0px 1px 2px rgba(24, 24, 28, 0.06);
+    margin-bottom: 12px;
+}
+
+.card h4, .card p {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 8px;
+}
+
+.card p {
+    font-size: 14px;
+}
+
+.buttons {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: 8px;
+}
+
+.buttons li {
+    list-style: none;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 7px;
+    background-color: #EFEFEF;
+}
+
+li.li-back {
+    background-color: #FEF1DA;
+    color: #856527;
+}
+
+li.li-restart {
+    background-color: #E2F2FC;
+    color: #1a3c52;
+}
+
+.add-new {
+    background-color: #F6F6F6;
+    text-align: center;
+    padding: 18px;
+    border-radius: 8px;
+    color: #5F5F61;
+    box-shadow: 0px 0px 2px rgba(24, 24, 28, 0.02), 0px 1px 2px rgba(24, 24, 28, 0.06);
+    
+}

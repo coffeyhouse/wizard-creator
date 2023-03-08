@@ -1,15 +1,101 @@
-#sections, #edit-section {
-    width: calc(50% - 20px);
-    float: left;
-    min-height: 20px;
-    margin-right: 20px;
-    margin-top: 20px;
+* {
+    font-family: sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    gap: 48px;
+}
+
+.container #wiz-content {
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+    justify-content: space-between;
+}
+
+
+
+#sections {
+   flex-basis: 50%;
+}
+
+#edit-section {
+    flex-basis: 25%;
+    background-color: rgba(0,0,0,0.05);
+    padding: 36px;
+    border-radius: 12px;
+}
+
+#edit-section label {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(0,0,0,0.65);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: -16px;
+    margin-bottom: 6px;
+}
+
+#edit-section input,#edit-section textarea, #edit-section select {
+    padding: 8px;
+    width: 100%;
 }
 
 .section {
     border: 1px solid black;
     margin-bottom: 24px;
-    padding: 12px;
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.section button {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    border-bottom: 2px solid black;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.section h1 {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(0,0,0,0.65);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: -16px;
+    margin-bottom: 12px;
+}
+
+.section p {
+    font-size: 14px;
+    margin: 0;
+}
+
+.section ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    margin-top: 12px;
+}
+
+.section ul li {
+    display:inline-block;
+    border: 1px solid black;
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 14px;
 }
 
 #content {
@@ -25,5 +111,16 @@
 }
 
 .edit-input {
-    margin-bottom: 12px;
+    margin: 12px 0;
+    border-bottom: 3px solid black;
+    padding: 12px 0;
 }
+
+.edit-input label {
+    display: block;
+}
+
+hr {
+    margin: 36px;
+}
+

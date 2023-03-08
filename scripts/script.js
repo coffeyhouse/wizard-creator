@@ -6,8 +6,8 @@ const saveBtn = document.querySelector("#save-btn");
 const loadBtn = document.querySelector("#load-btn");
 const addBtn = document.querySelector("#add-btn");
 const saveSectionBtn = document.querySelector("#save-section");
-const nameInput = document.querySelector("input[name='name']");
-const contentInput = document.querySelector("textarea[name='content']");
+// const nameInput = document.querySelector("input[name='name']");
+// const contentInput = document.querySelector("textarea[name='content']");
 const cancelBtn = document.querySelector("#cancel-btn");
 const buttonCheckbox = document.querySelector("#button-checkbox");
 const addButtonContainer = document.querySelector("#add-button-container");
@@ -21,7 +21,7 @@ const testData = [
         buttons: [
             {
                 text: "Button 1",
-                link: 2
+                link: 10
             },
             {
                 text: "Button 2",
@@ -36,7 +36,7 @@ const testData = [
         buttons: [
             {
                 text: "Button 3",
-                link: 2
+                link: 1
             },
             {
                 text: "Button 4",
@@ -51,11 +51,11 @@ const testData = [
         buttons: [
             {
                 text: "Button five",
-                link: 2
+                link: 10
             },
             {
                 text: "Button six",
-                link: 3
+                link: 1
             }
         ]
     }
@@ -112,6 +112,12 @@ function addSectionsToPage() {
                 sectionButton.textContent = `${section.buttons[y].text} (Go to: ${section.buttons[y].link})`;
                 sectionButtons.appendChild(sectionButton);
             }
+        }
+
+        if (section.back) {
+            const backButton = document.createElement("li");
+            backButton.textContent = `Back button  (Go to: ${section.back})`;
+            sectionButtons.appendChild(backButton);
         }
 
         sectionEditBtn.textContent = "Edit";
@@ -175,12 +181,139 @@ function addEditButtonEventListener() {
 
 function loadSectionContentIntoInputs(id) {
     const index = getIndexOfSection(id);
+    const selectedItem = wizardArray[index];
 
-    nameInput.value = wizardArray[index].name;
-    contentInput.value = wizardArray[index].content.replace(/<br \/>/g, "\n");
+    editSection.textContent = "";
+    const hr = document.createElement("hr");
+    const nameInput = createInput("Name", "text");
+    const contentInput = createInput("Content", "select");
+    const buttonCheckbox = createInput("Buttons", "checkbox");
+    const buttonContainer = document.createElement("div");
+    const back = document.createElement("div");
+    back.classList.add("edit-input");
+    const backLabel = document.createElement("label");
+    const backCheckbox = document.createElement("input");
+    backCheckbox.setAttribute("type", "checkbox");
+    backCheckbox.classList.add("edit-input-item");
+    backCheckbox.setAttribute("id", "back-checkbox");
+    backCheckbox.addEventListener("change", showBackButtonSelect);
+    const backSelect = createSectionDropdown();
+    backSelect.setAttribute("id", "back-select");
+    backSelect.classList.add("edit-input-item");
+    backLabel.textContent = "Back button"
+    back.appendChild(backLabel);
+    back.appendChild(backCheckbox);
+    back.appendChild(backSelect);
+
+    editSection.appendChild(nameInput);
+
+    editSection.appendChild(contentInput);
+
+    editSection.appendChild(buttonCheckbox);
+
+    if (selectedItem.buttons) {
+        for (let x = 0; x < selectedItem.buttons.length; x++) {
+
+            const button = document.createElement("div");
+            const buttonInput = document.createElement("input");
+            const buttonSelector = createSectionDropdown();
+
+            button.classList.add("edit-input");
+            button.classList.add("button-edit");
+
+            buttonInput.setAttribute("type", "text");
+            buttonInput.value = selectedItem.buttons[x].text;
+            buttonInput.classList.add("edit-input-item");
+
+            buttonSelector.classList.add("edit-input-item");
+            buttonSelector.value = selectedItem.buttons[x].link;
+            button.appendChild(buttonInput);
+            button.appendChild(buttonSelector);
+            buttonContainer.appendChild(button);
+        }
+        document.querySelector("#buttons-input").checked = true;
+        document.querySelector("#buttons-input").disabled = true;
+    }
+
+
+    editSection.appendChild(buttonContainer);
+    editSection.appendChild(back);
+
+    const saveButton = document.createElement("button");
+    saveButton.textContent = "Apply changes";
+    saveButton.setAttribute("id", "edit-save-btn");
+    saveButton.addEventListener("click", saveButtonTest);
+    saveButton.setAttribute("disabled", "true");
+
+    editSection.appendChild(saveButton);
+
+    document.querySelector("#name-input").value = selectedItem.name;
+
+    document.querySelector("#content-input").value = selectedItem.content.replace(/<br \/>/g, "\n");
 
     selectedIndex = index;
-    console.log(nameInput);
+
+    const sections = document.querySelectorAll(".edit-input-item");
+
+    sections.forEach((section) => {
+        section.addEventListener("keyup", compareContent);
+        section.addEventListener("change", compareContent);
+    });
+}
+
+function saveButtonTest() {
+    wizardArray[selectedIndex] = createEditItemToCompare();
+    addSectionsToPage();
+    const saveButton = document.querySelector("#edit-save-btn");
+    saveButton.setAttribute("disabled", "true");
+    alert("Content saved!");
+}
+
+function compareContent() {
+    const currentItem = JSON.stringify(wizardArray[selectedIndex]);
+    const editItem = JSON.stringify(createEditItemToCompare());
+    const saveButton = document.querySelector("#edit-save-btn");
+
+    if (currentItem === editItem) {
+        saveButton.setAttribute("disabled", "true");
+    } else {
+        saveButton.removeAttribute("disabled");
+    }
+}
+
+function createEditItemToCompare() {
+    const item = {};
+    const name = document.querySelector("#name-input");
+    const content = document.querySelector("#content-input");
+    const buttons = document.querySelectorAll(".button-edit");
+    const backCheckbox = document.querySelector("#back-checkbox");
+    const backSelect = document.querySelector("#back-select");
+    const buttonArray = [];
+
+    buttons.forEach((button) => {
+        buttonItem = {};
+        buttonItem.text = button.querySelector("input").value;
+        buttonItem.link = parseInt(button.querySelector("select").value);
+        buttonArray.push(buttonItem);
+    });
+
+
+
+    item.id = wizardArray[selectedIndex].id;
+    item.name = name.value;
+    item.content = content.value;
+
+    if (buttons.length > 0) {
+        item.buttons = buttonArray;
+    }
+
+    if (backCheckbox.checked) {
+        item.back = backSelect.value;
+    } else {
+        item.back = false;
+    }
+
+    return item;
 }
 
 function saveToLocalStorage() {
@@ -193,6 +326,21 @@ function loadFromLocalStorage() {
     wizardArray = JSON.parse(dataFromLocalStorage);
     alert("Data loaded from local storage");
     addSectionsToPage();
+}
+
+function checkIfSavedInLocalStorage() {
+    const dataStored = localStorage.getItem("wizardData");
+
+    if (dataStored) {
+        const loadData = confirm("There's data stored in localStorage, want to load it?");
+
+        if (loadData) {
+            wizardArray = JSON.parse(dataStored);
+            console.log(wizardArray)
+            addSectionsToPage();
+
+        }
+    }
 }
 
 function saveSection(e) {
@@ -256,7 +404,7 @@ function createSectionDropdown() {
     const select = document.createElement("select");
     const initialOption = document.createElement("option");
     initialOption.setAttribute("disabled", "");
-    initialOption.setAttribute("selected", "");
+    // initialOption.setAttribute("selected", "");
     initialOption.textContent = "-- Select an option --";
 
     select.appendChild(initialOption);
@@ -272,13 +420,13 @@ function createSectionDropdown() {
     return select;
 }
 
-function createEditSection() {
-    const nameInput = createInput("Name", "text");
-    const contentInput = createInput("Content", "select");
-
-    editSection.appendChild(nameInput);
-    editSection.appendChild(contentInput);
-
+function showBackButtonSelect(e) {
+    if (e.target.checked) {
+        document.querySelector("#back-select").removeAttribute("disabled");
+    } else {
+        document.querySelector("#back-select").setAttribute("disabled", "");
+        document.querySelector("#back-select").value = null;
+    }
 }
 
 function createInput(name, type) {
@@ -290,26 +438,35 @@ function createInput(name, type) {
     const label = document.createElement("label");
     label.setAttribute("for", itemName);
     label.textContent = name + ":";
-
     item.appendChild(label);
 
+    let input;
+
     if (type === "text") {
-        const input = document.createElement("input");
+        input = document.createElement("input");
         input.setAttribute("type", "text");
-        input.setAttribute("id", name.toLowerCase() + "-input");
-        input.setAttribute("name", name.toLowerCase() + "-input");
-        item.appendChild(input);
     }
 
     if (type === "select") {
-        const input = document.createElement("textarea");
+        input = document.createElement("textarea");
         input.setAttribute("rows", "5");
-        input.setAttribute("id", name.toLowerCase() + "-input");
-        input.setAttribute("name", name.toLowerCase() + "-input");
-        item.appendChild(input);
     }
 
+    if (type === "checkbox") {
+        input = document.createElement("input");
+        input.setAttribute("type", "checkbox");
+    }
+
+    input.setAttribute("id", name.toLowerCase() + "-input");
+    input.setAttribute("name", name.toLowerCase() + "-input");
+    input.classList.add("edit-input-item");
+    item.appendChild(input);
+
     return item;
+}
+
+function addContentToEditInputs() {
+    console.log("add content");
 }
 
 
@@ -317,6 +474,6 @@ function createInput(name, type) {
 saveBtn.addEventListener("click", saveToLocalStorage);
 loadBtn.addEventListener("click", loadFromLocalStorage);
 addBtn.addEventListener("click", addNewSectionToArray);
-saveSectionBtn.addEventListener("click", saveSection)
-cancelBtn.addEventListener("click", clearInputs);
-buttonCheckbox.addEventListener("change", watchButtonCheckbox)
+
+
+checkIfSavedInLocalStorage();
