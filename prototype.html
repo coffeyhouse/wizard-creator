@@ -13,7 +13,7 @@
 <body>
     <div id="header">
         <div class="left-header">
-            <div class="icon"></div>
+            <div class="icon"><img src="images/magicwand-svgrepo-com.svg" /></div>
             <p>Wizard creator</p>
         </div>
         <div class="right-header">
@@ -24,33 +24,114 @@
     </div>
     <div id="main">
         <div class="container">
-            <h3>Title</h3>
-            <p>Test</p>
-            <div class="card">
-                <h4>Title of the card</h4>
-                <p>A line of text goes here and etc</p>
-                <ul class="buttons">
-                    <li>Button 1</li>
-                    <li>Another button</li>
-                    <li>And a button</li>
-                    <li class="li-back">Back button</li>
-                    <li class="li-restart">Restart button</li>
-                </ul>
+            <h3>Tax code troubleshooter</h3>
+            <p id="section-title">Sections <span class="section-count">3</span></p>
+            <div id="card-container">
+                <div id="card-1" class="card">
+                    <div class="card-title">
+                        <h4>Area selection</h4>
+                        <img class="edit-icon" src="images/edit.svg" onclick="selectSection('1')" />
+                        <span class="selected-section">Selected</span>
+                    </div>
+                    <p>Click the area you want to make changes in:</p>
+                    <ul class="buttons">
+                        <li class="li-btn">Customer</li>
+                        <li class="li-btn">Supplier</li>
+                        <li class="li-btn">Opening balance</li>
+                        <li class="li-btn">Bank</li>
+                        <li class="li-btn">Journal</li>
+                        <!-- <li class="li-back">Back button</li>
+                        <li class="li-restart">Restart button</li> -->
+                    </ul>
+                </div>
+                <div id="card-2"  class="card">
+                    <div class="card-title">
+                        <h4>Customer</h4>
+                        <img class="edit-icon" src="images/edit.svg" onclick="selectSection('2')" />
+                        <span class="selected-section" >Selected</span>
+                    </div>
+                    <p>Which type of customer transaction do you need to correct?</p>
+                    <ul class="buttons">
+                        <li class="li-btn">Sales invoice (SI)</li>
+                        <li class="li-btn">Sales credit note (SC)</li>
+                        <li class="li-btn">Sales discount (SD)</li>
+                        <li class="li-btn">Sales receipt (SR)</li>
+                        <li class="li-btn">Sales payment on account (SA)</li>
+                        <li class="li-btn">Sales payment (SP)</li>
+                        <li class="li-restart">Restart button</li>
+                        <li class="li-add" onclick="openModal('show')">+ Add button</li>
+                    </ul>
+                </div>
+                <div id="card-3"  class="card">
+                    <div class="card-title">
+                        <h4>Sales invoice (SI)</h4>
+                        <img class="edit-icon" src="images/edit.svg" onclick="selectSection('3')"/>
+                        <span class="selected-section">Selected</span>
+                    </div>
+                    <p>Correct a sales invoice transaction.</p>
+                    <ul>
+                        <li class="li-btn">Edit a sales invoice (SI) transaction ></li>
+                        <li class="li-btn">Unallocate a customer invoice (SI) transaction ></li>
+                        <li class="li-btn">Delete a customer invoice (SI) transaction ></li>
+                    </ul>
+                    <ul class="buttons">
+                        <li class="li-back">Back button</li>
+                        <li class="li-restart">Restart button</li>
+                    </ul>
+                </div>
+
             </div>
-            <div class="card">
-                <h4>Title of the card</h4>
-                <p>A line of text goes here and etc</p>
-                <ul class="buttons">
-                    <li>Another button</li>
-                    <li>And a button</li>
-                    <li class="li-back">Back button</li>
-                </ul>
-            </div>
-            <div class="add-new">
+            <div class="add-new" onclick="openModal('show')">
                 <p>+ Add section</p>
             </div>
         </div>
+        <div class="modal">
+            <div class="modal-window">
+                <div class="modal-header">
+                    <h4>MODAL</h4>
+                    <button onclick="openModal('close')" class="header-close">x</button>
+                </div>
+                <div class="modal-content">
+                    <p>Content</p>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="openModal('close')">Close</button>
+                    <button class="btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function openModal(trigger) {
+            const modal = document.querySelector(".modal");
+            const container = document.querySelector(".container");
+            const header = document.querySelector("#header");
+
+            if (trigger === "show") {
+                modal.style.visibility = "visible";
+                modal.style.opacity = "1";
+                container.style.filter = "blur(5px)";
+                header.style.filter = "blur(5px)";
+            } else {
+                modal.style.visibility = "hidden";
+                modal.style.opacity = "0";
+                container.style.filter = "blur(0px)";
+                header.style.filter = "blur(0px)";
+            }
+
+        }
+
+        function selectSection(val) {
+            const section = document.querySelector("#card-" + val);
+            const cards = document.querySelectorAll(".card");
+            cards.forEach(card => {
+                card.classList.remove("selected");
+            })
+            
+            section.classList.add("selected");
+        }
+    </script>
 </body>
 
 </html>
