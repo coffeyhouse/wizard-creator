@@ -182,14 +182,16 @@ function createModal() {
 
     const saveButton = document.createElement("button");
     saveButton.textContent = "Save";
+    saveButton.setAttribute("id", "modal-save");
     saveButton.classList.add("btn-primary");
     modalFooter.appendChild(saveButton);
 }
 
 function createCards() {
+    cardContainer.textContent = "";
+
     for (let x = 0; x < sections.length; x++) {
         const data = sections[x];
-        console.log(data);
 
         const card = document.createElement("div");
         card.setAttribute("id", `card-${data.id}`);
@@ -275,7 +277,7 @@ function getIndexOfSection(id) {
 
 function openAddButtonModal() {
     amendModalTitle("Add button");
-    
+
     modalContent.textContent = null;
 
     const label = document.createElement("label");
@@ -320,6 +322,9 @@ function openAddButtonModal() {
 
     buttonTypeSelect.addEventListener("click", changeAddButtonSelect);
 
+    const saveButton = document.querySelector("#modal-save");
+    saveButton.addEventListener("click", () => { addButton("normal"); });
+
 
     console.log(sections[selectedIndex].back);
 
@@ -344,6 +349,27 @@ function changeAddButtonSelect() {
             break;
     }
 
+}
+
+function addButton(type) {
+    console.log(sections[selectedIndex].buttons);
+    const text = prompt("Button name?")
+    const newButton = {
+        text: text,
+        link: 123
+    }
+
+    sections[selectedIndex].buttons.push(newButton);
+    createCards();
+    openModal("hide");
+
+    removeEventListeners("#modal-save");
+}
+
+function removeEventListeners(id) {
+    const old_element = document.querySelector(id);
+    const new_element = old_element.cloneNode(true);
+    old_element.parentNode.replaceChild(new_element, old_element);
 }
 
 function amendModalTitle(val) {
