@@ -98,6 +98,7 @@ button.btn-primary {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .icon img {
@@ -302,6 +303,26 @@ button.btn-primary {
 
 .modal .modal-window .modal-content {
     flex-grow: 1;
+}
+
+.modal-content {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+select { 
+    padding: 8px;
+}
+
+select option {
+    padding: 8px;
 }
 
 .modal .modal-window .modal-footer {
