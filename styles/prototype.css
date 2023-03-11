@@ -309,7 +309,7 @@ button.btn-primary {
     margin-top: 24px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
 label {
@@ -338,6 +338,24 @@ select option {
 
 .modal, .container, #header {
     transition: 0.5s filter linear, 0.5s opacity, visibility 0.5s;
+}
+
+.modal-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-section .btn-section {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.modal-section .btn-section input, .modal-section .btn-section select {
+    flex-grow: 1;
+    flex-basis: 50%;
+    width: 50%;
 }
 
 

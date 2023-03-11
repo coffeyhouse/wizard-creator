@@ -394,37 +394,60 @@ function createEditModal() {
     clearModal();
 
     const section = sections[selectedIndex];
-    console.log(section);
+
+    const titleSection = document.createElement("div");
+    titleSection.setAttribute("id", "modal-section-title");
+    titleSection.classList.add("modal-section");
+
     const titleLabel = document.createElement("label");
     titleLabel.textContent = "Title:";
-    modalContent.appendChild(titleLabel);
+    titleSection.appendChild(titleLabel);
 
     const titleInput = document.createElement("input");
     titleInput.setAttribute("type", "text");
     titleInput.value = section.name;
-    modalContent.appendChild(titleInput);
+    titleSection.appendChild(titleInput);
+
+    modalContent.appendChild(titleSection);
+
+    const contentSection = document.createElement("div");
+    contentSection.setAttribute("id", "modal-section-content");
+    contentSection.classList.add("modal-section");
 
     const contentLabel = document.createElement("label");
     contentLabel.textContent = "Content:";
-    modalContent.appendChild(contentLabel);
+    contentSection.appendChild(contentLabel);
 
     const contentInput = document.createElement("textarea");
     contentInput.value = section.content;
-    modalContent.appendChild(contentInput);
+    contentSection.appendChild(contentInput);
+
+    modalContent.appendChild(contentSection);
 
     section.buttons.forEach((button, index) => {
+        const btnSection = document.createElement("div");
+        btnSection.setAttribute("id", `modal-section-btn-${index}`);
+        btnSection.classList.add("modal-section");
+
+        const btn = document.createElement("div");
+        btn.classList.add("btn-section");
+
         const btnLabel = document.createElement("label");
         btnLabel.textContent = `Button ${index}:`;
-        modalContent.appendChild(btnLabel);
+        btnSection.appendChild(btnLabel);
 
         const btnName = document.createElement("input");
         btnName.setAttribute("type", "text");
         btnName.value = button.text;
-        modalContent.appendChild(btnName);
+        btn.appendChild(btnName);
 
         const btnTarget = createSectionDropdown();
         btnTarget.value = button.link;
-        modalContent.appendChild(btnTarget);
+        btn.appendChild(btnTarget);
+
+        btnSection.appendChild(btn);
+
+        modalContent.appendChild(btnSection);
     });
 
     const backLabel = document.createElement("label");
@@ -432,7 +455,9 @@ function createEditModal() {
     modalContent.appendChild(backLabel);
 
     const backInput = createSectionDropdown();
-    backInput.value = section.back;
+    if (section.back) {
+        backInput.value = section.back;
+    }
     modalContent.appendChild(backInput);
 
     const restartLabel = document.createElement("label");
@@ -440,7 +465,9 @@ function createEditModal() {
     modalContent.appendChild(restartLabel);
 
     const restartInput = createSectionDropdown();
-    restartInput.value = section.restart;
+    if (section.restart) {
+        restartInput.value = section.restart;
+    }
     modalContent.appendChild(restartInput);
 
     const newButtonLabel = document.createElement("label");
@@ -451,11 +478,28 @@ function createEditModal() {
     btnName.setAttribute("type", "text");
     modalContent.appendChild(btnName);
 
-    const btnTarget = document.createElement("input");
-    btnTarget.setAttribute("type", "text");
+    const btnTarget = createSectionDropdown();
     modalContent.appendChild(btnTarget);
 
+    setUpTinyMCE();
     openModal('show');
+}
+
+function setUpTinyMCE() {
+    tinymce.init({
+        selector: '#modal-section-content textarea',
+        height: 300,
+        plugins: [
+          'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+          'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+      });
 }
 
 function clearModal() {
