@@ -266,7 +266,11 @@ function selectSection(val) {
     const cards = document.querySelectorAll(".card");
     cards.forEach(card => {
         card.classList.remove("selected");
-    })
+    });
+
+    const cardTitle = section.querySelector("h4");
+
+    cardTitle.addEventListener("click", createEditModal);
 
     section.classList.add("selected");
 }
@@ -386,7 +390,97 @@ function buildPage() {
 
 buildPage();
 
+function createEditModal() {
+    clearModal();
 
+    const section = sections[selectedIndex];
+    console.log(section);
+    const titleLabel = document.createElement("label");
+    titleLabel.textContent = "Title:";
+    modalContent.appendChild(titleLabel);
+
+    const titleInput = document.createElement("input");
+    titleInput.setAttribute("type", "text");
+    titleInput.value = section.name;
+    modalContent.appendChild(titleInput);
+
+    const contentLabel = document.createElement("label");
+    contentLabel.textContent = "Content:";
+    modalContent.appendChild(contentLabel);
+
+    const contentInput = document.createElement("textarea");
+    contentInput.value = section.content;
+    modalContent.appendChild(contentInput);
+
+    section.buttons.forEach((button, index) => {
+        const btnLabel = document.createElement("label");
+        btnLabel.textContent = `Button ${index}:`;
+        modalContent.appendChild(btnLabel);
+
+        const btnName = document.createElement("input");
+        btnName.setAttribute("type", "text");
+        btnName.value = button.text;
+        modalContent.appendChild(btnName);
+
+        const btnTarget = createSectionDropdown();
+        btnTarget.value = button.link;
+        modalContent.appendChild(btnTarget);
+    });
+
+    const backLabel = document.createElement("label");
+    backLabel.textContent = "Back button:";
+    modalContent.appendChild(backLabel);
+
+    const backInput = createSectionDropdown();
+    backInput.value = section.back;
+    modalContent.appendChild(backInput);
+
+    const restartLabel = document.createElement("label");
+    restartLabel.textContent = "Restart button:";
+    modalContent.appendChild(restartLabel);
+
+    const restartInput = createSectionDropdown();
+    restartInput.value = section.restart;
+    modalContent.appendChild(restartInput);
+
+    const newButtonLabel = document.createElement("label");
+    newButtonLabel.textContent = "New button:";
+    modalContent.appendChild(newButtonLabel);
+
+    const btnName = document.createElement("input");
+    btnName.setAttribute("type", "text");
+    modalContent.appendChild(btnName);
+
+    const btnTarget = document.createElement("input");
+    btnTarget.setAttribute("type", "text");
+    modalContent.appendChild(btnTarget);
+
+    openModal('show');
+}
+
+function clearModal() {
+    modalContent.textContent = null;
+}
+
+function createSectionDropdown() {
+    const select = document.createElement("select");
+    const initialOption = document.createElement("option");
+    // initialOption.setAttribute("disabled", "");
+    // initialOption.setAttribute("selected", "");
+    initialOption.textContent = "-- Select an option --";
+
+    select.appendChild(initialOption);
+
+    for (let x = 0; x < sections.length; x++) {
+        const option = document.createElement("option");
+        option.setAttribute("value", sections[x].id);
+        option.textContent = sections[x].name;
+
+        select.appendChild(option);
+    }
+
+    return select;
+}
 
 
 

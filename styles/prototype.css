@@ -317,7 +317,7 @@ label {
     font-weight: 600;
 }
 
-select { 
+select, input, textarea { 
     padding: 8px;
 }
 
